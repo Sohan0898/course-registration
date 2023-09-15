@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 const Home = () => {
   const [courses, setCourses] = useState([]);
   const [selectCourse, setSelectCourse] = useState([]);
-  const [totalCost, setTotalCost] = useState(0);
+  const [totalCredit, settotalCredit] = useState(0);
+  const [totalCost, settotalCost] = useState(0);
   const [remaining, setRemaining] = useState(0);
   useEffect(() => {
     fetch("/course.json")
@@ -20,25 +21,36 @@ const Home = () => {
     const isExist = selectCourse.find((item) => item.id == course.id);
 
     let count = course.credit;
+    let cost = course.price;
 
     if (isExist) {
-      toast("⚠️ Course already selected!!!");
+      return toast("⚠️ This Course Already Selected !");
     } else {
       selectCourse.forEach((item) => {
         count = count + item.credit;
       });
-      const remaining = 20 - count;
-      setTotalCost(count);
-      setRemaining(remaining);
 
-      setSelectCourse([...selectCourse, course]);
+      selectCourse.forEach((item) => {
+        cost = cost + item.price;
+      });
+
+      const remaining = 20 - count;
+      if (count > 20) {
+        return toast("⚠️ Credit Are Not Available !");
+      } else {
+        settotalCredit(count);
+        setRemaining(remaining);
+        settotalCost(cost);
+
+        setSelectCourse([...selectCourse, course]);
+      }
     }
   };
   // console.log(selectCourse);
 
   return (
-    <div className="flex justify-center gap-10">
-      <div className="grid grid-cols-3 gap-5">
+    <div className="lg:flex justify-center gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {courses.map((course) => (
           <div
             key={course.id}
@@ -88,6 +100,7 @@ const Home = () => {
         <Cart
           selectCourse={selectCourse}
           remaining={remaining}
+          totalCredit={totalCredit}
           totalCost={totalCost}
         ></Cart>
       </div>
