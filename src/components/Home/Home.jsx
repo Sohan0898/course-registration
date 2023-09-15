@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { FaDollarSign, FaBookOpen } from "react-icons/fa";
+import Cart from "../Cart/Cart";
 const Home = () => {
   const [courses, setCourses] = useState([]);
+  const [selectCourse, setSelectCourse] = useState([]);
   useEffect(() => {
     fetch("/course.json")
       .then((res) => res.json())
       .then((data) => setCourses(data));
   }, []);
-//   console.log(courses);
+  //   console.log(courses);
+
+  const handleSelectCourse = (course) => {
+    setSelectCourse([...selectCourse, course]);
+  };
+  // console.log(selectCourse);
 
   return (
     <div className="flex justify-center gap-10">
@@ -47,15 +54,18 @@ const Home = () => {
               </div>
             </div>
             <div className="px-6 pb-4 pt-2 text-center">
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 w-full rounded-lg">
+              <button
+                onClick={() => handleSelectCourse(course)}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 w-full rounded-lg"
+              >
                 Select
               </button>
             </div>
           </div>
         ))}
       </div>
-      <div>
-        <h1 className="text-3xl">cart copomnet</h1>
+      <div className="">
+        <Cart selectCourse={selectCourse}></Cart>
       </div>
     </div>
   );
