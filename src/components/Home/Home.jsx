@@ -1,6 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { FaDollarSign, FaBookOpen } from "react-icons/fa";
 import Cart from "../Cart/Cart";
+import { toast } from 'react-toastify';
+
 const Home = () => {
   const [courses, setCourses] = useState([]);
   const [selectCourse, setSelectCourse] = useState([]);
@@ -12,7 +15,17 @@ const Home = () => {
   //   console.log(courses);
 
   const handleSelectCourse = (course) => {
-    setSelectCourse([...selectCourse, course]);
+    const isExist = selectCourse.find((item) => item.id ==
+    course.id);
+    
+
+    if(isExist){
+        toast("⚠️ Course already selected!!!");
+    }
+    else{
+        setSelectCourse([...selectCourse, course]);
+    }
+    
   };
   // console.log(selectCourse);
 

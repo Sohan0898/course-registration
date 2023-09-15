@@ -21,7 +21,7 @@ const Cart = ({ selectCourse }) => {
       ))}
       <hr className="mt-6" />
       <p className="py-6 text-lg text-gray-500 font-medium">
-        Total Credit Hour :
+        Total Credit Hour : hr
       </p>
     </div>
   );
