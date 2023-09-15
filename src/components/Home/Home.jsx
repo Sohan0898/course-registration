@@ -2,11 +2,13 @@
 import { useEffect, useState } from "react";
 import { FaDollarSign, FaBookOpen } from "react-icons/fa";
 import Cart from "../Cart/Cart";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const Home = () => {
   const [courses, setCourses] = useState([]);
   const [selectCourse, setSelectCourse] = useState([]);
+  const [totalCost, setTotalCost] = useState(0);
+  const [remaining, setRemaining] = useState(0);
   useEffect(() => {
     fetch("/course.json")
       .then((res) => res.json())
@@ -15,17 +17,22 @@ const Home = () => {
   //   console.log(courses);
 
   const handleSelectCourse = (course) => {
-    const isExist = selectCourse.find((item) => item.id ==
-    course.id);
-    
+    const isExist = selectCourse.find((item) => item.id == course.id);
 
-    if(isExist){
-        toast("⚠️ Course already selected!!!");
+    let count = course.credit;
+
+    if (isExist) {
+      toast("⚠️ Course already selected!!!");
+    } else {
+      selectCourse.forEach((item) => {
+        count = count + item.credit;
+      });
+      const remaining = 20 - count;
+      setTotalCost(count);
+      setRemaining(remaining);
+
+      setSelectCourse([...selectCourse, course]);
     }
-    else{
-        setSelectCourse([...selectCourse, course]);
-    }
-    
   };
   // console.log(selectCourse);
 
@@ -78,7 +85,11 @@ const Home = () => {
         ))}
       </div>
       <div className="">
-        <Cart selectCourse={selectCourse}></Cart>
+        <Cart
+          selectCourse={selectCourse}
+          remaining={remaining}
+          totalCost={totalCost}
+        ></Cart>
       </div>
     </div>
   );
